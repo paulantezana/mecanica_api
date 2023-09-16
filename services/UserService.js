@@ -5,6 +5,8 @@ const userPaginate = async ({ page, limit }) => {
   const offset = (page - 1) * limit;
 
   const [rows] = await connection.query("SELECT * FROM users LIMIT ? OFFSET ?", [limit, offset]);
+  
+  connection.release();
 
   return rows;
 }
@@ -13,6 +15,8 @@ const userGetById = async (id) => {
   const connection = await pool.getConnection();
 
   const [rows] = await connection.query("SELECT * FROM users WHERE id = ?", [id]);
+
+  connection.release();
 
   return rows[0] ?? {};
 }
@@ -62,6 +66,8 @@ const userLogin = async (user_name) => {
   const connection = await pool.getConnection();
 
   const [rows] = await connection.query("SELECT * FROM users WHERE user_name = ?", [user_name]);
+
+  connection.release();
 
   return rows[0] ?? {};
 };
